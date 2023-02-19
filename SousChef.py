@@ -7,13 +7,23 @@ import cli
 import tkinter as tk
 
 def show_recipes():
+    global display_data, state
+
+    display_data = []
     if len(recipes.my_recipes) == 0:
-        print('no recipes saved.')
+        display_data = ['no recipes saved.']
     for recipe in recipes.my_recipes:
-        print(f"{recipe['id']}: {recipe['name']}")
+        display_data.append(f"{recipe['id']}: {recipe['name']}")
+    
+    if state[0] != 'SHOW_RCP':
+        state.insert(0, "SHOW_RCP")    
+
+    return display_data
 
 def add_recipe():
-    user_input = input('Paste a URL: ')
+
+
+    user_input = cli.get_url()
 
     status, html = recipes.fetch_from_url(user_input)
 
@@ -24,24 +34,50 @@ def add_recipe():
     
     recipes.write(recipe)
 
-print('Starting SousChef\n')
+def back():
+    state.pop(0)
+    # print(state)
+    # d = input()
 
-commands = {'exit': exit, 'show': show_recipes, 'add':add_recipe}
+# Commands configuration
+cmds ={}
+cmds['func_call'] = {
+    '--add':add_recipe,
+    '-a': add_recipe,
+    '--show': show_recipes,
+    '-s': show_recipes,
+    '-b': back,
+    '--back': back,
+    '-e': exit,
+    '--exit': exit}
 
-# Get recipes
-if len(recipes.my_recipes) == 0:
-    print("You have no saved recipes. Command 'A' to add one")
+cmds['disp_main'] = {'-s --show': 'Show my loaded recipes', '-a --add': 'Add a new recipe from a URL', '-e --exit': 'Exit the application'}
+cmds['disp_recp'] = {'-b --back': 'Go back', '##': 'Recipe Details'}
 
+# State control variables
+display_data = []
+bad_cmd=False
+state = ["MAIN"]
+
+# Program Loop
 while True:
-    cli.draw()
-    
-    user_input = input('Command: ').lower()
-    if user_input in commands.keys():
-        commands[user_input]()
+    if state[0] == "MAIN":
+        display_data=[]
+        cmd_set = cmds['disp_main']
+    elif state[0] == "SHOW_RCP":
+        cmd_set = cmds['disp_recp']
+
+    user_input = cli.draw(display_data=display_data, show_cmds=cmd_set, bad_cmd=bad_cmd)
+    bad_cmd = False
+
+    if user_input in cmds['func_call'].keys():
+        if user_input == '--exit' or user_input == '-e':
+            cli.clear()
+            exit()
+        else:
+            display_data = cmds['func_call'][user_input]()
     else:
-        print(f'"{user_input}" is not a recognized command.')
-
-
+        bad_cmd = True
 
 # gui = tk.Tk()
 # gui.title('Sous Chef')
