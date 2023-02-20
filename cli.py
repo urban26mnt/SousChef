@@ -51,9 +51,10 @@ def draw(**kwargs):
 def get_url():
     clear()
     prt_header()
-    content_rows = 3
+    content_rows = 6
 
-    prompt = """Add a recipe from the web.
+    prompt = """
+    Add a recipe from the web.
     Currently supports recipes from cookinglight.com, allrecipes.com, and foodnetwork.com
     (-c or --cancel to goes to home)
 

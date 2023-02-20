@@ -28,16 +28,15 @@ def recipe_detail(rcp_id):
     display_data = [f"Recipe:  {rcp_data['name']}"]
     display_data.append('\nIngredients:\n')
     # display_data.append(f"{0:8s}{1:8s}{2:40s}")
-    display_data.append(f"Qty:     Unit:    Ingredient:")
-    # for ingredient in rcp_data['ingredients']:
-        # display_data.append(ingredient['qty'])
+    display_data.append(f"Qty:     Unit:          Ingredient:")
+
     for ingredient in rcp_data['ingredients']:
         if ingredient['unit'] is None:
             unit = ""
         else:
             unit = ingredient['unit']
         
-        display_data.append(f"{ingredient['qty']:9s}{unit:9s}{ingredient['desc']:40s}")
+        display_data.append(f" {ingredient['qty']:9s}{unit:15s}{ingredient['desc']:40s}")
     
     return display_data
     
@@ -96,7 +95,6 @@ while True:
 
     user_input = cli.draw(display_data=display_data, show_cmds=cmd_set, bad_cmd=bad_cmd, state=state)
     bad_cmd = False
-    prior_display = display_data
 
     if user_input in cmds['func_call'].keys():
         if user_input == '--exit' or user_input == '-e':
@@ -116,3 +114,4 @@ while True:
         display_data = recipe_detail(rcp_id)
     else: 
         bad_cmd = True
+
