@@ -42,7 +42,7 @@ def draw(**kwargs):
         if 'bad_cmd' in kwargs.keys():
             if kwargs['bad_cmd']:
                 print('Unrecognized Command.\n')
-
+    print(kwargs['state'])
     user_input = input('Command: ').lower()
 
     content_rows = 0
@@ -53,6 +53,13 @@ def get_url():
     prt_header()
     content_rows = 3
 
-    url = input('\n\nAdd a recipe from web.\n(-c or --cancel to cancel)')
+    prompt = """Add a recipe from the web.
+    Currently supports recipes from cookinglight.com, allrecipes.com, and foodnetwork.com
+    (-c or --cancel to goes to home)
 
+    URL: 
+    """
+
+    url = input(prompt)
+    
     return url
