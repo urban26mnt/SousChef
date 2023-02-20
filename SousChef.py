@@ -90,11 +90,29 @@ while True:
     if state[0] == "MAIN":
         display_data=[]
         cmd_set = cmds['disp_main']
+        user_input = cli.draw(display_data=display_data, show_cmds=cmd_set, bad_cmd=bad_cmd, state=state)
+    
     elif state[0] == "SHOW_RCP":
+        display_data = show_recipes()
         cmd_set = cmds['disp_recp']
+        user_input = cli.draw(display_data=display_data, show_cmds=cmd_set, bad_cmd=bad_cmd, state=state)
+        
+        if user_input not in cmds['func_call'].keys():
+            try:
+                rcp_id = int(user_input)
+                state.insert(0, "RCP_DETL")
+            except:
+                bad_cmd = True
 
-    user_input = cli.draw(display_data=display_data, show_cmds=cmd_set, bad_cmd=bad_cmd, state=state)
-    bad_cmd = False
+    elif state[0] == "RCP_DETL":
+        display_data = recipe_detail(rcp_id)
+        cmd_set = cmds['disp_recp']
+        user_input = cli.draw(display_data=display_data, show_cmds=cmd_set, bad_cmd=bad_cmd, state=state)
+
+    else:
+        print('Unknown State.')
+        user_input = input("Press any key to exit.")
+        exit()
 
     if user_input in cmds['func_call'].keys():
         if user_input == '--exit' or user_input == '-e':
@@ -102,16 +120,6 @@ while True:
             exit()
         else:
             display_data = cmds['func_call'][user_input]()
-            
-    elif state[0] == "SHOW_RCP":
-        try:
-            rcp_id = int(user_input)
-        except:
-            bad_cmd = True
-            break
-    
-        state.insert(0, "RCP_DETAIL")
-        display_data = recipe_detail(rcp_id)
-    else: 
-        bad_cmd = True
+
+    bad_cmd = False
 
