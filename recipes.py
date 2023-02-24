@@ -119,4 +119,12 @@ def recipe_list():
     
     return recipe_list
 
+def recipe_id_from_url(url):
+    recipe_id = None
+    for recipe in my_recipes:
+        if url == recipe['url']:
+            recipe_id = recipe['id']
+    
+    return recipe_id
+
 my_recipes = read()
