@@ -9,11 +9,10 @@ import tkinter as tk
 def show_recipes():
     global state
 
-    display_data = []
     if len(recipes.my_recipes) == 0:
         display_data = ['no recipes saved.']
-    for recipe in recipes.my_recipes:
-        display_data.append(f"{recipe['id']}: {recipe['name']}")
+    else:
+        display_data = recipes.recipe_list()
     
     if state[0] != 'SHOW_RCP':
         state.insert(0, "SHOW_RCP")    
