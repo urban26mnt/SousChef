@@ -1,5 +1,6 @@
 """Recipes.py - Gathers recipes from cooking lite web scrape."""
 
+import nutrition
 import requests
 import json
 import re
@@ -12,7 +13,12 @@ RECIPE_FILE = os.path.join(RECIPE_PATH,'recipes.txt')
 
 
 def write(recipe):
-    my_recipes.append(recipe)
+    # Append new recipe or update existing recipe
+    if recipe['id'] > len(my_recipes)-1:
+        my_recipes.append(recipe)
+    else:
+        my_recipes[recipe['id']] = recipe
+
     # Save recipe data to file
     with open(RECIPE_FILE, mode='wt', encoding='utf-8') as f:
         json.dump(my_recipes, f)
@@ -134,5 +140,35 @@ def recipe_id_from_name(name):
             recipe_id = recipe['id']
 
     return recipe_id
+
+# # TODO - update this function
+# def update_with_nutrition(recipe_id, nutrition):
+#     my_recipes[recipe_id]['nutrition'] = nutrition
+
+#     # Update stored .txt
+#     return True
+
+def add_recipe(url):
+    # Check if recipe exists
+    recipe_id = recipe_id_from_url(url)
+    if recipe_id != None:
+        return f"Recipe already saved."
+
+    # Add new recipe
+    status, html = fetch_from_url(url)
+    
+    if status == 200:
+        recipe = html_to_recipe(html, url)
+    else:
+        return f"Recipe fetch failed. Status code: {status} wth message: {html}"
+
+    # Update recipe with nutrition information.
+    nutrition_info = nutrition.fetch_nutrition(shopping_list(recipe_id=recipe['id']))
+
+    recipe['nutrition'] = nutrition_info
+
+    write(recipe)
+
+    return f"Recipe successfully added."
 
 my_recipes = read()
