@@ -49,13 +49,18 @@ def add_recipe():
     
     # TODO Error check URL.
 
+    if recipes.recipe_id_from_url(user_input) != None:
+        # Existing recipe
+        print('recipe exists!')
+        return False
+       
     status, html = recipes.fetch_from_url(user_input)
 
     if status==200:
         recipe = recipes.html_to_recipe(html)
     else:
         print(f'Unable to reach site:\n\n Response{status}\nMessage:  {html}')
-    
+        
     recipes.write(recipe)
 
 def back():
@@ -121,4 +126,3 @@ while True:
             display_data = cmds['func_call'][user_input]()
 
     bad_cmd = False
-
