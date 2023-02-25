@@ -110,7 +110,7 @@ def shopping_list(recipe_id):
     for ingredient in my_recipes[recipe_id]['ingredients']:
         shopping_list.append(ingredient['desc'])
     
-    return shopping_list        
+    return shopping_list
 
 def recipe_list():
     recipe_list = []
