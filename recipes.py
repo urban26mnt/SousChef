@@ -127,4 +127,12 @@ def recipe_id_from_url(url):
     
     return recipe_id
 
+def recipe_id_from_name(name):
+    recipe_id = None
+    for recipe in my_recipes:
+        if name == recipe['name']:
+            recipe_id = recipe['id']
+
+    return recipe_id
+
 my_recipes = read()
