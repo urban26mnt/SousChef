@@ -118,12 +118,32 @@ def shopping_list(recipe_id):
     
     return shopping_list
 
+def nutrition_profile(recipe_id):
+    nutrition_prof = []
+    nut_d = my_recipes[recipe_id]['nutrition']
+    for item in my_recipes[recipe_id]['nutrition']:
+        nut = item + ":" + str(round(nut_d[item],2))
+        nutrition_prof.append(nut)
+    
+    nutrition_prof.sort()
+    
+    return nutrition_prof
+
 def recipe_list():
     recipe_list = []
     for recipe in my_recipes:
-        recipe_list.append(f"{recipe['id']}: {recipe['name']}")
+        recipe_list.append(f" {recipe['id']}: {recipe['name']}")
     
     return recipe_list
+
+def nutrition_list(recipe_id):
+    nutrition_list = []
+    for k,v in my_recipes[recipe_id]['nutrition'].items():
+        nutrition_list.append(f" {k}:  {v}")
+    
+    nutrition_list.sort()
+
+    return nutrition_list
 
 def recipe_id_from_url(url):
     recipe_id = None
@@ -141,34 +161,28 @@ def recipe_id_from_name(name):
 
     return recipe_id
 
-# # TODO - update this function
-# def update_with_nutrition(recipe_id, nutrition):
-#     my_recipes[recipe_id]['nutrition'] = nutrition
-
-#     # Update stored .txt
-#     return True
-
 def add_recipe(url):
     # Check if recipe exists
     recipe_id = recipe_id_from_url(url)
     if recipe_id != None:
-        return f"Recipe already saved."
-
-    # Add new recipe
-    status, html = fetch_from_url(url)
-    
-    if status == 200:
-        recipe = html_to_recipe(html, url)
+        return_str = f"Recipe already saved."
     else:
-        return f"Recipe fetch failed. Status code: {status} wth message: {html}"
+        # Add new recipe
+        status, html = fetch_from_url(url)
+        
+        if status == 200:
+            recipe = html_to_recipe(html, url)
+        else:
+            return_str = f"Recipe fetch failed. Status code: {status} with message: {html}"
 
-    # Update recipe with nutrition information.
-    nutrition_info = nutrition.fetch_nutrition(shopping_list(recipe_id=recipe['id']))
+        # Update recipe with nutrition information.
+        nutrition_info = nutrition.fetch_nutrition(shopping_list(recipe_id=recipe['id']))
 
-    recipe['nutrition'] = nutrition_info
+        recipe['nutrition'] = nutrition_info
 
-    write(recipe)
-
-    return f"Recipe successfully added."
+        write(recipe)
+        return_str = f"Recipe successfully added."
+    
+    return return_str
 
 my_recipes = read()
