@@ -129,6 +129,10 @@ def nutrition_profile(recipe_id):
     
     return nutrition_prof
 
+def recipe_price(recipe_id):
+    price = my_recipes[recipe_id]['price']  
+    return price
+
 def recipe_list():
     recipe_list = []
     for recipe in my_recipes:
@@ -144,6 +148,7 @@ def nutrition_list(recipe_id):
     nutrition_list.sort()
 
     return nutrition_list
+
 
 def recipe_id_from_url(url):
     recipe_id = None
