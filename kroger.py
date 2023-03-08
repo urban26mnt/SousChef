@@ -62,6 +62,9 @@ def shopping_list_search(shopping_list):
             my_searches[item] = products
 
             write_search_data()
+    
+    return True, 'shopping list successfully fetched.'
+
 
 def pricing_estimate(search_term):
     if search_term not in my_searches.keys():
@@ -69,10 +72,11 @@ def pricing_estimate(search_term):
     
     results = my_searches[search_term]
     prices = []
-    for result in results:
-        if 'price' in result['items'][0].keys():
-            prices.append(result['items'][0]['price']['regular'])
-    
+    if results is not None:
+        for result in results:
+            if 'price' in result['items'][0].keys():
+                prices.append(result['items'][0]['price']['regular'])
+        
     if len(prices) > 0:
         return mean(prices)
     else:
@@ -119,7 +123,7 @@ locations = get_locations()
 location_id = locations['data'][0]['locationId']
 
 my_searches = read_search_data()
-    
+
 
 # Begin section for automatic tests
 # if __name__ == "__main__":

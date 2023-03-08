@@ -40,13 +40,6 @@ def fetch_nutrition(ingredientlist):
 
     return filtered_nutrition_d
 
-# =============================================================================
-# cwd = os.getcwd()
-# out_file = cwd + "/nutrition_data.csv"
-# p1 = open(out_file, 'w')  
-# s.to_csv(out_file, sep='\t', encoding='utf-8')
-# =============================================================================
-
 if __name__ == "__main__":
     # test_name = 'Lentil Salad With Beets and Spinach'
     test_url = 'https://www.cookinglight.com/recipes/lentil-salad-with-beets-and-spinach'

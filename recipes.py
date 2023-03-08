@@ -5,7 +5,6 @@ import requests
 import json
 import re
 import os
-import pprint as pp
 from bs4 import BeautifulSoup as bs
 
 RECIPE_PATH = 'recipes'
@@ -94,9 +93,7 @@ def html_to_recipe(html, source_url):
         else:
             recipe['ingredients'].append({'item':ingredient, 'qty':None, 'unit':None, 'desc':ingredient})
 
-    # Save html to backup file for testing / dev
-    # with open(f"recipes\{recipe_name}.txt", mode='wt', encoding='utf-8') as f:
-    #     f.write(html)
+    recipe['price'] = 0
 
     # write recipe to my_recipes
     write(recipe)
