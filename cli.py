@@ -55,7 +55,7 @@ def get_url():
 
     prompt = """
     Add a recipe from the web.
-    Currently supports recipes from cookinglight.com, allrecipes.com, and foodnetwork.com
+    Currently supports recipes from cookinglight.com and foodnetwork.com
     (-c or --cancel to goes to home)
 
     URL: 
